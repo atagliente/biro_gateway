@@ -1,0 +1,25 @@
+version: "3.1"
+services:
+  postgres:
+    image: postgres
+    env_file:
+      - database.env
+    volumes:
+      # save db data on host
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5438:5432'
+  keycloak:
+    image: quay.io/keycloak/keycloak:15.0.1
+    ports:
+      - "8080:8080"
+    env_file:
+      - keycloak.env
+    depends_on:
+      - postgres
+  gateway:
+    image: biro/gateway_app
+    depends_on:
+      - keycloak
+    ports:
+      - '9000:9090'
