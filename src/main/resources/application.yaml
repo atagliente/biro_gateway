@@ -12,11 +12,11 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: http://keycloak:8080/auth/realms/biro/protocol/openid-connect/certs
+          jwk-set-uri: http://172.18.16.109:8080/auth/realms/biro/protocol/openid-connect/certs
       client:
         provider:
           my-keycloak-provider:
-            issuer-uri: http://keycloak:8080/auth/realms/biro
+            issuer-uri: http://172.18.16.109:8080/auth/realms/biro
             # Individual properties can also be provided this way
             #            token-uri: http://localhost:8080/auth/realms/amrutrealm/protocol/openid-connect/token
             #            authorization-uri: http://localhost:8080/auth/realms/biro/protocol/openid-connect/auth
