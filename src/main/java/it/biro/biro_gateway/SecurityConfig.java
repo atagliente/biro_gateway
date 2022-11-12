@@ -1,9 +1,12 @@
 package it.biro.biro_gateway;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,9 +14,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.*;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import java.util.*;
+
+import static org.bouncycastle.asn1.crmf.SinglePubInfo.web;
 
 @EnableGlobalMethodSecurity(
         prePostEnabled = true,
@@ -29,7 +38,7 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeExchange()
-                .pathMatchers("/user").hasAuthority("user_read")
+                .pathMatchers("/user", "/api/log/**").hasAuthority("user_read")
                 .pathMatchers("/admin").hasAuthority("admin_read")
                 .anyExchange().permitAll().and()
                 .oauth2ResourceServer()
@@ -51,9 +60,9 @@ public class SecurityConfig {
         @Override
         public Flux<GrantedAuthority> convert(Jwt jwt) {
             final Map<String, List<String>> realmAccess = (Map<String, List<String>>) jwt.getClaims().get("realm_access");
-            System.out.println("\n\n\n" + realmAccess.toString() + "\n\n\n");
             return Flux.fromStream(realmAccess.get("roles").stream()
                     .map(SimpleGrantedAuthority::new));
         }
     }
+
 }
