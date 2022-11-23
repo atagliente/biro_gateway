@@ -38,9 +38,10 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeExchange()
-                .pathMatchers("/user", "/api/log/**").hasAuthority("user_read")
+                .pathMatchers( "/api/log/**").hasAuthority("user_read")
+                .pathMatchers( "/api/registry/**").hasAuthority("user_read")
                 .pathMatchers("/admin").hasAuthority("admin_read")
-                .anyExchange().permitAll().and()
+                .anyExchange().denyAll().and()
                 .oauth2ResourceServer()
                 .jwt(jwt -> {
                     System.out.println(jwt);

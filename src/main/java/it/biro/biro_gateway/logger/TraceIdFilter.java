@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import it.biro.biro_gateway.Utils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -17,6 +18,9 @@ import java.util.Date;
 @Component
 @Slf4j
 public class TraceIdFilter implements WebFilter {
+
+    @Value("${nameOrDockerIP}")
+    private String nameOrDockerIP;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -34,7 +38,7 @@ public class TraceIdFilter implements WebFilter {
                          "biro_gateway",
                                inner);
                         String json = ow.writeValueAsString(logData);
-                        Utils.call("http://172.22.59.140:8081/api/log/", json);
+                        Utils.call("http://" + nameOrDockerIP + ":8081/api/log/", json);
                     } catch (Exception ex) {
                         System.out.println("EXC: " + ex);
                     }
