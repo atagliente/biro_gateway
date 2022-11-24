@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .authorizeExchange()
                 .pathMatchers( "/api/log/**").hasAuthority("user_read")
                 .pathMatchers( "/api/registry/**").hasAuthority("user_read")
+                .pathMatchers( "/docs/registry/api/**").hasAuthority("admin_read")
+                .pathMatchers( "/docs/log/api/**").hasAuthority("admin_read")
                 .pathMatchers("/admin").hasAuthority("admin_read")
                 .anyExchange().denyAll().and()
                 .oauth2ResourceServer()

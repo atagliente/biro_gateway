@@ -12,10 +12,22 @@ spring:
             - Path=/api/log/**
           filters:
             - StripPrefix=0
+        - id: log_docs
+          uri: http://${nameOrDockerIP}:8081
+          predicates:
+            - Path=/docs/log/api/**
+          filters:
+            - StripPrefix=0
         - id: registry
           uri: http://${nameOrDockerIP}:8082
           predicates:
             - Path=/api/registry/**
+          filters:
+            - StripPrefix=0
+        - id: registry_docs
+          uri: http://${nameOrDockerIP}:8082
+          predicates:
+            - Path=/docs/registry/api/**
           filters:
             - StripPrefix=0
   security:
